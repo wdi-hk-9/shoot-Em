@@ -17,11 +17,23 @@ header{
   width: 500px;
 }
 
-#fireArea{
+#home{
   border-right: 1px solid #688CA3;
   background-color: #FFC4C9;
   width: 50px;
   height: 256px;
+}
+
+#homeText{
+  margin-left: 3px;
+}
+
+#dangerText{
+  margin-left: 40px;
+}
+
+#dangerZone{
+  border: 1px solid
 }
 
 #player{
@@ -30,7 +42,7 @@ header{
   background-size: 55px 55px;   /* img size */
   height: 50px;
   width: 49px;                  /* img border */
-
+  top: 0px;
 }
 
 #enemy{
@@ -39,7 +51,7 @@ header{
   background-color: red;
   height: 20px;
   width: 20px;
-/*  left: 475px;
+/*left: 475px;
   top: 17px;*/
 }
 
@@ -51,5 +63,5 @@ header{
   height: 10px;
   width: 10px;
   left: 50px;
-  /*top: 24px;*/
+  /*top: 90px;*/
 }
