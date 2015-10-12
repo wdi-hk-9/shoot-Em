@@ -2,34 +2,44 @@ $(function(){
 
 var game = new Game();
 var keys = [];    //to detect multiple keys
+var bullets = [];
 var playerMovement = 20;
 var player = $('#player');
 //var enemeyPosition = $('.enemy').position();
 
+//*Bullet still moves with #player horizonal axis*
 function shoot(){
   var xPos = player.position().top;
-  $('div#box').append('<div class="bullet"></div>');  //insert bullet
-  $('.bullet').css({'top': xPos+25 + 'px'}).animate({left: '490px'}, 1200); //attach bullet to player position
 
-    //add: push to array to tract bullets
-    //add: after spacebar, release player position so bullet keeps own position
-    //add: if collides with enemy position OR goes out of the window, splice out of array. toggle off/disapear/hide
+  //insert bullet
+  $('div#box').append('<div class="bullet"></div>');
+
+  //attach bullet to player position
+  $('.bullet').css({'top': xPos+25 + 'px'}).animate({left: '500px'}, 1500);;
+
+  //loop through bullets to push in array
+  for (var i=1;i<=1;i++){ //testing
+    bullets.push(i);
+  }
+
+  //console.log
+  console.log("bullets array " + bullets);
 }
 
-//bullet boundery
-  // function bulletBoundery(){
-  //   if ($('.bullet').left == 490 ){
-  //     // remove from array (splice)
-  //   }
-  // }
+//*I can't make it work* Bullet boundery = (enemy hit || max width) then remove from array.
+function bulletBoundery(){
+  if ($('.bullet').position().left >= 500 ){ //max width
+    bullets.splice(0,1);
+  }
+}
 
-//I can't make it work. trying to set it to the border limit
+//*I can't make it work* Trying to set it to the border limit
 function boundery() {
   if (player.position().top >= 200){
-    player.animate({top: ='200px'});
+    player.animate({top: '200px'});
   }
   if (player.position().top <= 0){
-    player.animate({top: ='10px'});
+    player.animate({top: '10px'});
   };
 }
 
@@ -53,7 +63,12 @@ function keysPressed(e) {
     player.animate({top: '+=' + playerMovement}, 100);
     e.preventDefault();
   }
+
   boundery();
+  bulletBoundery();
+
+  //console.log
+  console.log("keys array " + keys);
 }
 
 //once released, same keys in arrays become false.
@@ -61,7 +76,7 @@ function keysReleased(e) {
     keys[e.keyCode] = false;
 }
 
-//event listener
+//event listeners
 $(document).keyup(keysReleased);
 $(document).keydown(keysPressed);
 
