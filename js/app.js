@@ -3,9 +3,18 @@ $(function(){
 var game = new Game();
 var keys = [];    //to detect multiple keys
 var bullets = [];
-var playerMovement = 20;
+var playerMovement = 10;
 var player = $('#player');
 //var enemeyPosition = $('.enemy').position();
+
+//*ERROR, arrays not splicing & bullets not hiding*
+//Bullet boundery = (enemy hit || max width) then remove from array & remove div.class
+function bulletBoundery(){
+  if (($('.bullet').position().left) >= 489 ){ //max width
+    bullets.splice(0,1);
+    $('.bullet').remove();
+  }
+}
 
 //*Bullet still moves with #player horizonal axis*
 function shoot(){
@@ -13,35 +22,19 @@ function shoot(){
 
   //insert bullet
   $('div#box').append('<div class="bullet"></div>');
+
   //attach bullet to player position
   $('.bullet').css({'top': xPos+25 + 'px'}).animate({left: '489px'}, 1500);
+
   //loop through bullets to push in array
   for (var i=1;i<=1;i++){ //testing
     bullets.push(i);
   }
+
   bulletBoundery();
+
   //console.log
   console.log("bullets array " + bullets);
-}
-
-//*ERROR, arrays not splicing & bullet not hiding*
-//Bullet boundery = (enemy hit || max width) then remove from array.
-function bulletBoundery(){
-  if (($('.bullet').position().left) >= 489 ){ //max width
-    bullets.splice(0,1);
-     //hides bullet after
-  $('.bullet').hide(0);
-  }
-}
-
-//*I can't make it work* Trying to set it to the border limit
-function boundery() {
-  if (player.position().top >= 200){
-    player.animate({top: '200px'});
-  }
-  if (player.position().top <= 0){
-    player.animate({top: '10px'});
-  };
 }
 
 //changed to if statement. easier for me to see.
@@ -54,18 +47,27 @@ function keysPressed(e) {
     shoot();
     e.preventDefault();
   }
+
   //up arrow key
   if (keys[38]) {
-    player.animate({top: '-=' + playerMovement}, 100);
-    e.preventDefault();
-  }
-  //down arrow key
-  if (keys[40]) {
-    player.animate({top: '+=' + playerMovement}, 100);
-    e.preventDefault();
+    //inserted player top & bottom bounderies
+    if (player.position().top < 0)
+      player.clearQueue();
+    else {
+      player.animate({top: '-=' + playerMovement}, 20);
+      e.preventDefault();
+    }
   }
 
-  boundery();
+  //down arrow key
+  if (keys[40]) {
+    if (player.position().top > 200)
+      player.clearQueue();
+    else {
+      player.animate({top: '+=' + playerMovement}, 20);
+      e.preventDefault();
+    }
+  }
   //console.log
   console.log("keys array " + keys);
 }
