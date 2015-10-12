@@ -13,23 +13,24 @@ function shoot(){
 
   //insert bullet
   $('div#box').append('<div class="bullet"></div>');
-
   //attach bullet to player position
-  $('.bullet').css({'top': xPos+25 + 'px'}).animate({left: '500px'}, 1500);;
-
+  $('.bullet').css({'top': xPos+25 + 'px'}).animate({left: '489px'}, 1500);
   //loop through bullets to push in array
   for (var i=1;i<=1;i++){ //testing
     bullets.push(i);
   }
-
+  bulletBoundery();
   //console.log
   console.log("bullets array " + bullets);
 }
 
-//*I can't make it work* Bullet boundery = (enemy hit || max width) then remove from array.
+//*ERROR, arrays not splicing & bullet not hiding*
+//Bullet boundery = (enemy hit || max width) then remove from array.
 function bulletBoundery(){
-  if ($('.bullet').position().left >= 500 ){ //max width
+  if (($('.bullet').position().left) >= 489 ){ //max width
     bullets.splice(0,1);
+     //hides bullet after
+  $('.bullet').hide(0);
   }
 }
 
@@ -65,8 +66,6 @@ function keysPressed(e) {
   }
 
   boundery();
-  bulletBoundery();
-
   //console.log
   console.log("keys array " + keys);
 }
