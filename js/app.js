@@ -3,27 +3,34 @@ $(function(){
 var game = new Game();
 var keys = [];    //to detect multiple keys
 var playerMovement = 10;
-var player = $('#player');
 var bulletCount = 0;
 var enemyCount = 0;
+var currentKill = 0;
+var enemyPassCount = 0;
+var interval;
+
+var player = $('#player');
+
+var mission = parseInt($('span#mission').html());
+var enemyPass = parseInt($('span#enemyPass').html());
+var enemyLimit = parseInt($('span#enemyLimit').html());
 
 ///////////////////////////////////////////////////////
+
 
 function spawnEnemy(){
   var makeEnemeyPos = game.randomEnemy(15,230);
   var enemyName = "enemy" + enemyCount;
   enemyCount++;
   $('div#spawn').append('<div class="enemy" id="' + enemyName + '"></div>');
-  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '56px'}, {duration: 10000, done: function(){
+  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '56px'}, {duration: 5000, done: function(){
     this.remove();
   }});
-}
+ }
 
-function startSpawn() {
-    setInterval(spawnEnemy, 1000);
-}
 
 ///////////////////////////////////////////////////////
+
 
 function shoot(){
   var xPos = player.position().top;
@@ -51,27 +58,14 @@ function shoot(){
 
         enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
         $('div#' + bulletName).remove(); // removes the div
+
+        currentKill += 1;
+        parseInt($('span#score').html(currentKill));
       }
 
-    }
-  }});
+      gameOver();
+  }}});
 }
-
-///////////////////////////////////////////////////////
-              /* INSERT SCORE FUNCTION */
-
-//make SCORING
-//if (enemies.eq(i).remove() = true){
-    // score++
-    //parseInt($('span#score').html()) = score
-//}
-
-///////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////
-
-          /* INSERT GAME OVER FUNCTION */
 
 ///////////////////////////////////////////////////////
 
@@ -80,6 +74,9 @@ function keysPressed(e) {
 
   if (keys[32]) { //spacebar
     shoot();
+
+    //**THIS GOES FASTER SINCE IT'S ALWAYS PRESSED, put it somewhere else**
+    interval = setInterval(spawnEnemy, 3000); //3000
     e.preventDefault();
   }
 
@@ -111,8 +108,41 @@ function keysReleased(e) {
 
 ///////////////////////////////////////////////////////
 
+// **NOT DONE: need to do htmlLoose condition**
+function gameOver(){
+
+  var htmlWIN = '';
+    htmlWIN += '<div id="winMessage"><h3>Congratulation! Mission Complete. You killed: ';
+    htmlWIN += currentKill;
+    htmlWIN += ' number of enemies</h3></div>';
+
+  var htmlLOOSE = '';
+    htmlLOOSE +=  '<div id="looseMessage"><h3>GAME OVER! Mission incomplete! You killed: ';
+    htmlLOOSE +=  currentKill;
+    htmlLOOSE +=  ' number of enemies</h3></div>';
+
+  if (currentKill == mission){
+    $('#box').replaceWith(htmlWIN);
+  }
+}
+
+function resetBox(){
+  clearInterval(interval); //stops interval;
+  $('.enemy').remove(); //clears the divs
+  $('#box').replaceWith('#box'); // **ERROR: Can't get back to original screen
+  bulletCount = 0;
+  enemyCount = 0;
+  currentKill = 0;
+  enemyPassCount = 0;
+  enemyPass = 0;
+  $('span#score').html(0);
+  $('span#enemyPass').html(0);
+}
+
+///////////////////////////////////////////////////////
+
 //event listeners
-$('#button').on('click', startSpawn);
+$('#button2').on('click', resetBox);
 $(document).keyup(keysReleased);
 $(document).keydown(keysPressed);
 

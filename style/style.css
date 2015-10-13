@@ -1,7 +1,30 @@
 header{
-  height: 140px;
+  height:100px;
   width: 500px;
   text-align: center;
+}
+
+#small1{
+  color: #CC5553;
+
+}
+
+#small2{
+  color: #CC43A3;
+}
+
+div#scores.row div{
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+#scores{
+  width: 500px;
+  text-align: center;
+  font-size: 15px;
+  margin-left: 0px;
+  color: #497799;
 }
 
 #button{
@@ -10,7 +33,7 @@ header{
 }
 
 #box{
-  position: relative;;
+  position: relative;
   background-color: #FFD6D5;
   border: 2px solid black;
   height: 260px;
@@ -34,7 +57,27 @@ header{
   background-size: 55px 55px;   /* img size */
   height: 50px;
   width: 49px;                  /* img border */
-  top: 0px;
+  top: 10px;
+}
+
+#winMessage{
+  background-color: #82FFD7;
+  font: #164A99;
+  border: 1px solid black;
+  border-radius: 4px;
+  /*z-index: 2;*/
+  height: 260px;
+  width: 500px;
+}
+
+#looseMessage{
+  background-color: #CC5377;
+  font: #FFC5C1;
+  border: 1px solid black;
+  border-radius: 4px;
+  z-index: 2;
+  height: 260px;
+  width: 500px;
 }
 
 .enemy{
