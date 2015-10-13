@@ -2,17 +2,25 @@ $(function(){
 
 var game = new Game();
 var keys = [];    //to detect multiple keys
-var bullets = [];
+var bulletsArray = [];
 var playerMovement = 10;
 var player = $('#player');
+var bullet = $('.bullet');
+var bulletCount = 0;
 //var enemeyPosition = $('.enemy').position();
+
+var singleBullet = new Object()
+  singleBullet.x =
+  singleBullet.y =
+
 
 //*ERROR, arrays not splicing & bullets not hiding*
 //Bullet boundery = (enemy hit || max width) then remove from array & remove div.class
 function bulletBoundery(){
   if (($('.bullet').position().left) >= 489 ){ //max width
-    bullets.splice(0,1);
-    $('.bullet').remove();
+    bulletsArray.splice(0,1);
+    // $('.bullet').remove();
+    $('div#amo:first-child').remove();
   }
 }
 
@@ -20,37 +28,47 @@ function bulletBoundery(){
 function shoot(){
   var xPos = player.position().top;
 
-  //insert bullet
-  $('div#box').append('<div class="bullet"></div>');
+  var bulletName = "bullet" + bulletCount;
+  bulletCount++;
+
+  $('div#amo').append('<div class="bullet" id="' + bulletName + '"></div>'); //insert bullet
+  // $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'}, 1500, ; //attach bullet to player position
+
+  $('div#' + bulletName).on("change", function () {
+    console.log("moved");
+  });
 
   //attach bullet to player position
-  $('.bullet').css({'top': xPos+25 + 'px'}).animate({left: '489px'}, 1500);
+  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'}, {duration: 1500, done: function () {
+    this.remove();
+  }, step: function (){
+    var bulletCords = $(this).offset()
+    var enemies = $(".enemy")
+    for (var i = 0; i < enemies.length; i++){
+      var enemyCords = enemies.eq(i).offset();
+      if ( bulletCords.left + 10 >= enemyCords.left       // 1 => leftside
+        && bulletCords.top >= enemyCords.top              // 2 => topside
+        && bulletCords.top + 10 <= enemyCords.top + 20){  // 3 => bottomside
 
-  //loop through bullets to push in array
-  for (var i=1;i<=1;i++){ //testing
-    bullets.push(i);
-  }
-
-  bulletBoundery();
-
-  //console.log
-  console.log("bullets array " + bullets);
+        enemies.eq(i).remove();
+        $('div#' + bulletName).remove();
+      }
+    }
+  }});
 }
 
-//changed to if statement. easier for me to see.
+
 function keysPressed(e) {
   // store an entry for every key pressed
   keys[e.keyCode] = true;
 
-  //spacebar
-  if (keys[32]) {
+  if (keys[32]) { //spacebar
     shoot();
     e.preventDefault();
   }
 
-  //up arrow key
-  if (keys[38]) {
-    //inserted player top & bottom bounderies
+  //inserted player top & bottom bounderies
+  if (keys[38]) { //up arrow key
     if (player.position().top < 0)
       player.clearQueue();
     else {
@@ -59,8 +77,7 @@ function keysPressed(e) {
     }
   }
 
-  //down arrow key
-  if (keys[40]) {
+  if (keys[40]) { //down arrow key
     if (player.position().top > 200)
       player.clearQueue();
     else {
@@ -68,8 +85,7 @@ function keysPressed(e) {
       e.preventDefault();
     }
   }
-  //console.log
-  console.log("keys array " + keys);
+  //console.log("keys array " + keys);
 }
 
 //once released, same keys in arrays become false.
@@ -80,5 +96,6 @@ function keysReleased(e) {
 //event listeners
 $(document).keyup(keysReleased);
 $(document).keydown(keysPressed);
+
 
 }); //end of doc.ready
