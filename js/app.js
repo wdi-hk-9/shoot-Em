@@ -4,21 +4,17 @@ var game = new Game();
 var keys = [];    //to detect multiple keys
 var playerMovement = 10;
 var player = $('#player');
-var bullet = $('.bullet');
 var bulletCount = 0;
 var enemyCount = 0;
-var enemey = $('.enemy');
 
 ///////////////////////////////////////////////////////
 
-//SEMI-Fail:
-//sometimes the enemy goes back to player position when spacebar is pressed when enemy is near the player
 function spawnEnemy(){
   var makeEnemeyPos = game.randomEnemy(15,230);
-  var enemyName = "bullet" + enemyCount;
+  var enemyName = "enemy" + enemyCount;
   enemyCount++;
   $('div#spawn').append('<div class="enemy" id="' + enemyName + '"></div>');
-  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '56px'}, {duration: 9000, done: function(){
+  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '56px'}, {duration: 10000, done: function(){
     this.remove();
   }});
 }
@@ -26,6 +22,7 @@ function spawnEnemy(){
 function startSpawn() {
     setInterval(spawnEnemy, 1000);
 }
+
 ///////////////////////////////////////////////////////
 
 function shoot(){
@@ -55,14 +52,26 @@ function shoot(){
         enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
         $('div#' + bulletName).remove(); // removes the div
       }
-    //make SCORING
-    //if (enemies.eq(i).remove() = true){
-        // score++
-        //parseInt($('span#score').html()) = score
-    //}
+
     }
   }});
 }
+
+///////////////////////////////////////////////////////
+              /* INSERT SCORE FUNCTION */
+
+//make SCORING
+//if (enemies.eq(i).remove() = true){
+    // score++
+    //parseInt($('span#score').html()) = score
+//}
+
+///////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////
+
+          /* INSERT GAME OVER FUNCTION */
 
 ///////////////////////////////////////////////////////
 
