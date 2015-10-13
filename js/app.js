@@ -1,40 +1,110 @@
 $(function(){
+
 var game = new Game();
+var keys = [];    //to detect multiple keys
+var playerMovement = 10;
+var player = $('#player');
+var bullet = $('.bullet');
+var bulletCount = 0;
+var enemyCount = 0;
+var enemey = $('.enemy');
 
-//var positionPlayer = $('#player').position();
-var xPosPlayer = $('#player').offset().top
-var yPosPlayer = $('#player').offset().left
+///////////////////////////////////////////////////////
 
-var enemeyPosition = $('.enemy').position();
-var htmlBullet = '<div class="bullet"></div>';
-var htmlEnemy = '<div id="enemy"></div>';
+//SEMI-Fail:
+//sometimes the enemy goes back to player position when spacebar is pressed when enemy is near the player
+function spawnEnemy(){
+  var makeEnemeyPos = game.randomEnemy(15,230);
+  var enemyName = "bullet" + enemyCount;
+  enemyCount++;
+  $('div#spawn').append('<div class="enemy" id="' + enemyName + '"></div>');
+  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '56px'}, {duration: 9000, done: function(){
+    this.remove();
+  }});
+}
 
+function startSpawn() {
+    setInterval(spawnEnemy, 1000);
+}
+///////////////////////////////////////////////////////
 
-  function shoot(){
-    $('div#fireArea').append(htmlBullet);
-    $('.bullet').animate({left: '465px'}, 1200); //move bullet from left to right. max 440px
-      //follow player
-      //if collides with enemy position, toggle off/disapear/hide
+function shoot(){
+  var xPos = player.position().top;
+
+  //create individual name for each bullet => bullet0, bullet1 etc..
+  var bulletName = "bullet" + bulletCount;
+  bulletCount++;
+
+  //insert bullet
+  $('div#amo').append('<div class="bullet" id="' + bulletName + '"></div>');
+
+  //attach indivdual bullets to player position
+  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'}, {duration: 1500, done: function () {
+    this.remove();                     //remove <div> it at the end of the animation (which is at the max width)
+
+  }, step: function (){                //function to be called for EACH animated property
+    var bulletCords = $(this).offset() //to get actual position on the screen
+    var enemies = $(".enemy")
+    for (var i = 0; i < enemies.length; i++){  // loop through .enemy class
+      var enemyCords = enemies.eq(i).offset(); // gets individual position
+
+      if ( bulletCords.left + 10 >= enemyCords.left + 5
+        && bulletCords.top + 10 >= enemyCords.top
+        && enemyCords.top + 20 >= bulletCords.top){
+
+        enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
+        $('div#' + bulletName).remove(); // removes the div
+      }
+    //make SCORING
+    //if (enemies.eq(i).remove() = true){
+        // score++
+        //parseInt($('span#score').html()) = score
+    //}
+    }
+  }});
+}
+
+///////////////////////////////////////////////////////
+
+function keysPressed(e) {
+  keys[e.keyCode] = true; // store an entry for every key pressed
+
+  if (keys[32]) { //spacebar
+    shoot();
+    e.preventDefault();
   }
 
-
-  $(document).keydown(function playerKeyMove(e){
-   switch(e.keyCode){
-    case 38: //up arrow key
-      $('#player').animate({top: '-=20px'}, 200).dequeue();
-      break;
-
-    case 40: //down arrow key
-      $('#player').animate({top: '+=20px'}, 200).dequeue();
-      break;
-
-    case 32: //space bar
-      shoot();
-      break;
-      // this needs to work even though 38 and 40 are pressed
+  //inserted player top & bottom bounderies
+  if (keys[38]) { //up arrow key
+    if (player.position().top < 0)
+      player.clearQueue();
+    else {
+      player.animate({top: '-=' + playerMovement}, 5);
+      e.preventDefault();
     }
-  }).keyup(function(e){ //end of keydown.
+  }
 
-  })
+  if (keys[40]) { //down arrow key
+    if (player.position().top > 200)
+      player.clearQueue();
+    else {
+      player.animate({top: '+=' + playerMovement}, 5);
+      e.preventDefault();
+    }
+  }
+  //console.log("keys array " + keys);
+}
+
+//once released, same keys in arrays become false.
+function keysReleased(e) {
+    keys[e.keyCode] = false;
+}
+
+///////////////////////////////////////////////////////
+
+//event listeners
+$('#button').on('click', startSpawn);
+$(document).keyup(keysReleased);
+$(document).keydown(keysPressed);
 
 }); //end of doc.ready
