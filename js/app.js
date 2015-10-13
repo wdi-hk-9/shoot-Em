@@ -11,8 +11,10 @@ var enemey = $('.enemy');
 
 ///////////////////////////////////////////////////////
 
+//SEMI-Fail:
+//sometimes the enemy goes back to player position when spacebar is pressed when enemy is near the player
 function spawnEnemy(){
-  var makeEnemeyPos = game.randomEnemy(30,230);
+  var makeEnemeyPos = game.randomEnemy(15,230);
   var enemyName = "bullet" + enemyCount;
   enemyCount++;
   $('div#spawn').append('<div class="enemy" id="' + enemyName + '"></div>');
@@ -21,6 +23,9 @@ function spawnEnemy(){
   }});
 }
 
+function startSpawn() {
+    setInterval(spawnEnemy, 1000);
+}
 ///////////////////////////////////////////////////////
 
 function shoot(){
@@ -36,6 +41,7 @@ function shoot(){
   //attach indivdual bullets to player position
   $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'}, {duration: 1500, done: function () {
     this.remove();                     //remove <div> it at the end of the animation (which is at the max width)
+
   }, step: function (){                //function to be called for EACH animated property
     var bulletCords = $(this).offset() //to get actual position on the screen
     var enemies = $(".enemy")
@@ -49,6 +55,11 @@ function shoot(){
         enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
         $('div#' + bulletName).remove(); // removes the div
       }
+    //make SCORING
+    //if (enemies.eq(i).remove() = true){
+        // score++
+        //parseInt($('span#score').html()) = score
+    //}
     }
   }});
 }
@@ -81,7 +92,7 @@ function keysPressed(e) {
       e.preventDefault();
     }
   }
-  console.log("keys array " + keys);
+  //console.log("keys array " + keys);
 }
 
 //once released, same keys in arrays become false.
@@ -89,10 +100,11 @@ function keysReleased(e) {
     keys[e.keyCode] = false;
 }
 
+///////////////////////////////////////////////////////
+
 //event listeners
-$('#button').on('click', spawnEnemy);
+$('#button').on('click', startSpawn);
 $(document).keyup(keysReleased);
 $(document).keydown(keysPressed);
-
 
 }); //end of doc.ready
