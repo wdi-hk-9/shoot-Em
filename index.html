@@ -13,12 +13,9 @@
 
       <header>
         <h2>shoot'Em</h2>
-        <button id="startButton" type="button" class="btn btn-success btn-lg">Start</button>
-        <button id="button2" type="button" class="btn btn-primary btn-lg">Reset</button>
       </header>
 
       <div id="scores" class="row">
-
         <div class="col-xs-6"><small id="small1">Don't let them get to you!</small>
         <br>Enemy limit:
         <span id="enemyPass">0</span> / <span id="enemyLimit">2</span></div>
@@ -26,10 +23,13 @@
         <div class="col-xs-6">
           <small id="small2">Mission!!!</small>
           <br> Current kills:
-          <span id="score"> 0 </span> / <span id="mission">5</span>
+          <span id="score"> 0 </span> / <span id="mission">20</span>
         </div>
 
       </div>
+
+          <button id="startButton" role="toolbar" type="button" class="btn-toolbar btn-warning pull-right">Start</button>
+          <button id="button2" role="toolbar" type="button" class="btn-toolbar btn-primary pull-right">Reset</button>
 
       <div id="box">
 

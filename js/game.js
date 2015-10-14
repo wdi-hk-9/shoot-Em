@@ -3,6 +3,6 @@ var Game = function(){
 };
 
 // Generate random numbers in an interval
-Game.prototype.randomEnemy = function(min, max) {
+Game.prototype.randomGen = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };

@@ -3,6 +3,7 @@ $(function(){
 var game = new Game();
 var keys = [];    //to detect multiple keys
 var playerMovement = 10;
+var enemyMovement = 5600  ;
 var bulletCount = 0;
 var enemyCount = 0;
 var currentKill = 0;
@@ -10,25 +11,36 @@ var enemyPassCount = 0;
 var spawnSpeed = 2950; //2950
 var enemyInterval;
 var shootInterval;
+var shootTimer;
+var locked = false;
 
 var player = $('#player');
-
 var mission = parseInt($('span#mission').html());
 var enemyPass = parseInt($('span#enemyPass').html());
 var enemyLimit = parseInt($('span#enemyLimit').html());
 
 $('#winMessage').hide();
 $('#looseMessage').hide();
+
+resetMission();
+
+///////////////////////////////////////////////////////
+function resetMission(){
+  var missionRandom = game.randomGen(15,30)
+  parseInt($('span#mission').html(missionRandom));
+
+  var enemyLimitRandom = Math.floor(game.randomGen(missionRandom*.2,missionRandom*.2))
+  parseInt($('span#enemyLimit').html(enemyLimitRandom));
+}
 ///////////////////////////////////////////////////////
 
-
 function spawnEnemy(){
-  var makeEnemeyPos = game.randomEnemy(15,210);
+  var makeEnemeyPos = game.randomGen(40,210);
   var enemyName = "enemy" + enemyCount;
   enemyCount++;
   $('div#spawn').append('<div class="enemy" id="' + enemyName + '"><img id="pig" src="images/pig2.png"></div>');
-  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '30px'}, {duration: 5000, done: function(){
-    this.remove(); //56px
+  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '30px'}, {duration: enemyMovement, done: function(){
+    this.remove();
   }, step: function (){
     var enemies = $(".enemy");
     for (var i = 0; i < enemies.length; i++){  // loop through .enemy class
@@ -51,6 +63,18 @@ function spawnEnemy(){
 ///////////////////////////////////////////////////////
 
 
+function shooting(){
+  if (!locked){
+  locked = true;
+  shootTimer = setTimeout(unlock, 100);
+  shoot();
+  }
+  function unlock(){
+    locked = false;
+    clearTimeout(shootTimer);
+  }
+}
+
 function shoot(){
   var xPos = player.position().top;
 
@@ -61,8 +85,8 @@ function shoot(){
   //insert bullet
   $('div#amo').append('<div class="bullet" id="' + bulletName + '"></div>');
 
-  //attach indivdual bullets to player position
-  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'}, {duration: 1500, done: function () {
+  //attach indivdual bullets to player position //1600
+  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'}, {duration: 1600, done: function () {
     this.remove();                     //remove <div> it at the end of the animation (which is at the max width)
   }, step: function (){                //function to be called for EACH animated property
     var bulletCords = $(this).offset(); //to get actual position on the screen
@@ -80,6 +104,7 @@ function shoot(){
         currentKill += 1;
         parseInt($('span#score').html(currentKill));
         console.log(currentKill)
+      }
 
       //increase speed if reach certain kills
       if (currentKill == 5){
@@ -89,10 +114,10 @@ function shoot(){
       if (currentKill == 10){
         enemyInterval = setInterval(spawnEnemy, spawnSpeed*0.8);
         console.log(enemyInterval);
-        }
+      }
 
       gameOver();
-  }}}});
+  }}});
 }
 
 ///////////////////////////////////////////////////////
@@ -101,7 +126,9 @@ function keysPressed(e) {
   keys[e.keyCode] = true; // store an entry for every key pressed
 
   if (keys[32]) { //spacebar
-    shoot();
+    // setTimeout(shoot,10);
+    shooting();
+    // bulletInterval;
     e.preventDefault();
   }
 
@@ -131,8 +158,9 @@ function keysReleased(e) {
     keys[e.keyCode] = false;
 }
 
-///////////////////////////////////////////////////////
+/////////////////game done//////////////////////////////////////
 
+// FAIL* Need to stop spawning
 function gameOver(){
   if (currentKill >= mission){
     $('#box').fadeOut(1000, function(){
@@ -140,20 +168,21 @@ function gameOver(){
       $('#winMessage').show();
       $('.enemy').remove();
       clearInterval(enemyInterval);
+      $('#startButton').html("Wow!").attr("disabled", false);
     })
-  }
-
-  if(enemyPass >= enemyLimit){
+  }else if(enemyPass >= enemyLimit){
     $('#box').fadeOut(1000, function(){
       $('#box').hide();
       $('#looseMessage').show();
       $('.enemy').remove();
       clearInterval(enemyInterval);
+      $('#startButton').html("Sadness").attr("disabled", false);
     });
   }
 }
 
 function resetBox(){
+  resetMission;
   clearInterval(enemyInterval); //stops interval;
   $('.enemy').remove(); //clears the divs
   $('#box').show();
@@ -165,21 +194,18 @@ function resetBox(){
   enemyPassCount = 0;
   enemyPass = 0;
   spawnSpeed = 2950;
-  spawnSpeed = 2950;
   $('span#score').html(0);
   $('span#enemyPass').html(0);
   $('#startButton').html("Start AGAIN?").attr("disabled", false);
   $('#button2').attr("disabled", false);
-
 }
 
 ///////////////////////////////////////////////////////
 
-
 //Start Button (event listeners)
 $('#startButton').attr("disabled", false).on('click', function(){
   enemyInterval = setInterval(spawnEnemy, spawnSpeed);
-  $('#startButton').html("Spawning... Shoot! Shoot!! Shoot!!!");
+  $('#startButton').html("Spawning...");
   $('#button2').on('click', resetBox).attr("disabled", false);
 });
 
