@@ -38,66 +38,33 @@ function resetMission(){
 
 ///////////////////////////////////////////////////////
 
-var bulletName = "bullet" + bulletCount;
-bulletCount++;
-var bulletCords = $('div#' + bulletName).offset(); // to get actual position on the screen
-
-function collision(){
-  var enemies = $(".enemy");
-
-  for (var i = 0; i < enemies.length; i++){
-    var enemyCords = enemies.eq(i).offset(); // gets individual position of enemy
-    var homeCords = $('#home').offset();
-
-    //Enemy hits #home right border
-    if ( homeCords.left + 53 >= enemyCords.left
-      && homeCords.top + 250 >= enemyCords.top
-      && enemyCords.top + 40 >= homeCords.top){
-
-        enemies.eq(i).remove();          // remove the .enemy elements one at a time to the specified index
-        $('div#' + bulletName).remove(); // removes the div
-        enemyPassCount +=1; // score
-        parseInt($('span#enemyPass').html(enemyPassCount));
-  }
-
-  //Bullet hits Enemy
-  // if ( bulletCords.left + 10 >= enemyCords.left + 10
-  //   && bulletCords.top + 10 >= enemyCords.top
-  //   && enemyCords.top + 40 >= bulletCords.top){
-
-  //     enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
-  //     $('div#' + bulletName).remove(); // removes the div
-  //     killCount += 1;
-  //     parseInt($('span#score').html(killCount));
-  //   }
-
-  speedUp();
-  gameOver();
-
-  } //end of for loop
-} //end of collision
-
-///////////////////////////////////////////////////////
-
 function spawnEnemy(){
-  //random positions
-  var makeEnemeyPos = game.randomGen(40,210); //min and max height
-
-  //create indiviual id's per enemy
+  var makeEnemeyPos = game.randomGen(40,210);
   var enemyName = "enemy" + enemyCount;
   enemyCount++;
-
-  //insert Enemy w/individual id's
   $('div#spawn').append('<div class="enemy" id="' + enemyName + '"><img id="pig" src="images/pig2.png"></div>');
+  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '53px'},
+      {duration: enemySpeed, done: function(){
+        this.remove();
+          }, step: function (){
+            var enemies = $(".enemy");
+            for (var i = 0; i < enemies.length; i++){  // loop through .enemy class
+              var enemyCords = enemies.eq(i).offset(); // gets individual position
+              var homeCords = $('#home').offset();
 
-  //make Enemy move
-  $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '53px'},{
-    duration: enemySpeed, done: function(){//5400
-      this.remove(); //remove Enemy after animation ends
-    },step: function(){
-        collision();
-      }
-  });
+              if (homeCords.left + 53 >= enemyCords.left
+                && homeCords.top + 250 >= enemyCords.top
+                && enemyCords.top + 40 >= homeCords.top){
+
+                  enemies.eq(i).remove();
+                  enemyPassCount+=1;
+                  console.log(enemyPassCount);
+                  parseInt($('span#enemyPass').html(enemyPassCount));
+                  gameOver();
+              }
+            }
+          }
+      });
 }
 
 ///////////////////////////////////////////////////////
@@ -105,18 +72,40 @@ function spawnEnemy(){
 function shoot(){
   var xPos = player.position().top;
 
+  //create individual name for each bullet => bullet0, bullet1 etc..
+  var bulletName = "bullet" + bulletCount;
+  bulletCount++;
+
   //insert bullet
   $('div#amo').append('<div class="bullet" id="' + bulletName + '"></div>');
 
-  //attach indivdual bullets to player position
-  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '484px'},{
-    duration: 3000, done: function(){ //3000
-      this.remove();   //remove <div> it at the end of the animation (which is at the max width)
-    },step: function(){
-      collision();
-    }
-  });
+  //attach indivdual bullets to player position //1600
+  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '489px'},
+    {duration: 1600, done: function(){
+      this.remove();                     //remove <div> it at the end of the animation (which is at the max width)
+        }, step: function (){                //function to be called for EACH animated property
+          var bulletCords = $(this).offset(); //to get actual position on the screen
+          var enemies = $(".enemy");
+          for (var i = 0; i < enemies.length; i++){  // loop through .enemy class
+            var enemyCords = enemies.eq(i).offset(); // gets individual position
+
+            if ( bulletCords.left + 10 >= enemyCords.left + 5
+              && bulletCords.top + 10 >= enemyCords.top
+              && enemyCords.top + 40 >= bulletCords.top){
+
+                enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
+                $('div#' + bulletName).remove(); // removes the div
+
+                killCount += 1;
+                parseInt($('span#score').html(killCount));
+                gameOver();
+            }
+
+          }
+        }
+    });
 }
+
 
 ///////////////////////////////////////////////////////
 
@@ -138,24 +127,24 @@ function shooting(){
 
 ///////////////////////////////////////////////////////
 
-function speedUp(){
-  if (killCount == 5){
-    setInterval(spawnEnemy, spawnSpeed-100);
-    enemySpeed -= 50
-  }
-  if (killCount == 10){
-    setInterval(spawnEnemy, spawnSpeed-200);
-    enemySpeed -= 50
-  }
-  if (killCount == 15){
-    setInterval(spawnEnemy, spawnSpeed-300);
-    enemySpeed -= 50
-  }
-  if (killCount == 20){
-    setInterval(spawnEnemy, spawnSpeed-400);
-    enemySpeed -= 50
-  }
-}
+// function speedUp(){
+//   if (killCount == 5){
+//     setInterval(spawnEnemy, spawnSpeed-100);
+//     enemySpeed -= 50
+//   }
+//   if (killCount == 10){
+//     setInterval(spawnEnemy, spawnSpeed-200);
+//     enemySpeed -= 50
+//   }
+//   if (killCount == 15){
+//     setInterval(spawnEnemy, spawnSpeed-300);
+//     enemySpeed -= 50
+//   }
+//   if (killCount == 20){
+//     setInterval(spawnEnemy, spawnSpeed-400);
+//     enemySpeed -= 50
+//   }
+// }
 
 ///////////////////////////////////////////////////////
 
@@ -187,7 +176,6 @@ function keysPressed(e) {
   }
 }
 
-
 //once released, same keys in arrays become false.
 function keysReleased(e) {
     keys[e.keyCode] = false;
@@ -203,7 +191,7 @@ function gameOver(){
       $('#box').hide();
       $('#winMessage').show();
       clearAll();
-    })
+    });
   } else if(enemyPassCount >= enemyLimit){
     console.log("Game over: Reached enemy limits");
 
