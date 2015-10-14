@@ -17,6 +17,8 @@ var mission = parseInt($('span#mission').html());
 var enemyPass = parseInt($('span#enemyPass').html());
 var enemyLimit = parseInt($('span#enemyLimit').html());
 
+$('#winMessage').hide();
+$('#looseMessage').hide();
 ///////////////////////////////////////////////////////
 
 
@@ -126,36 +128,30 @@ function keysReleased(e) {
 
 ///////////////////////////////////////////////////////
 
-// **NOT DONE: need to do htmlLoose condition**
 function gameOver(){
-
-  var htmlWIN = '';
-    htmlWIN += '<div id="winMessage"><h3>Congratulation! Mission Complete!</h3>';
-    htmlWIN += '<h4>You can now eat some bacon!</h4>'
-    htmlWIN += '<img id="bacon" src="http://static1.squarespace.com/static/53f03dd1e4b027cf34f2fc4b/t/553d767fe4b0befb836bd64e/1430091392154/"></div>';
-
-  var htmlLOOSE = '<div id="looseMessage"><h3>GAME OVER! Mission Failed!</h3></div>';
-
-  //Add Message
-  //ERROR: after click resart from this point, keys and bullets not tracking
   if (currentKill >= mission){
     $('#box').fadeOut(1000, function(){
-      $('#box').replaceWith(htmlWIN);
+      $('#box').hide();
+      $('#winMessage').show();
+      $('.enemy').remove();
+      clearInterval(enemyInterval);
+    })
+  } else if(enemyPass >= enemyLimit){
+    $('#box').fadeOut(1000, function(){
+      $('#box').hide();
+      $('#looseMessage').show();
+      $('.enemy').remove();
+      clearInterval(enemyInterval);
     });
   }
 }
 
 function resetBox(){
-  var divBox ='';
-    divBox += '<div id="box"><div id="home">';
-    divBox += '<span id="homeText">HOME</span>';
-    divBox += '<div id="player"></div></div>';
-    divBox += '<div id="amo"></div><div id="spawn"></div></div>';
-
   clearInterval(enemyInterval); //stops interval;
   $('.enemy').remove(); //clears the divs
-  $('#winMessage').replaceWith(divBox);
-  $('#htmlLOOSE').replaceWith(divBox);
+  $('#box').show();
+  $('#winMessage').hide();
+  $('#looseMessage').hide();
   bulletCount = 0;
   enemyCount = 0;
   currentKill = 0;
