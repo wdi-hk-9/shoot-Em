@@ -8,6 +8,12 @@ article {
   width: 500px;
 }
 
+body{
+  background-image: url(../images/pig2.png);
+  background-size: 40px;
+
+}
+
 #small1{
   color: #CC5553;
 }
@@ -20,6 +26,7 @@ div#scores.row div{
   border: 1px solid grey;
   border-radius: 5px;
   margin-bottom: 5px;
+  background-color: white;
 }
 
 #scores{
@@ -35,17 +42,17 @@ div#scores.row div{
   font-size: 15px;
   border-radius: 2px;
   position: absolute;
-  margin-left: 292px;
+  margin-left: 288px;
   margin-top: 3px;
   height: 35px;
-  z-index: 5;
+  z-index: 6;
 }
 
-#button2{
+#resetButton{
   border-radius: 2px;
   font-size: 15px;
   position: absolute;
-  margin-left: 443px;
+  margin-left: 441px;
   margin-top: 3px;
   height: 35px;
   z-index: 5;
@@ -106,17 +113,17 @@ div#scores.row div{
 }
 
 #pig{
-  height: 40px;
-  width: 40px;
+  height: 41px;
+  width: 41px;
   border: 1px solid red;
   border-radius: 3px;
 }
 
 .enemy{
   position: absolute;
-  background-size: 39px 39px;
-  height: 39px;
-  width: 39px;
+  background-size: 40px 40px;
+  height: 40px;
+  width: 40px;
   left: 455px;
   z-index: 0;
 

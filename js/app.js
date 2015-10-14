@@ -1,7 +1,7 @@
 $(function(){
 
 var game = new Game();
-var keys = [];    //to detect multiple keys
+var keys = [];    // to detect multiple keys
 var bulletName;
 
 var bulletCount = 0;
@@ -9,7 +9,7 @@ var enemyCount = 0;
 var killCount = 0;
 var enemyPassCount = 0;
 
-var spawnSpeed = 1100; //1100
+var spawnSpeed = 1200; // 1100
 var enemySpeed = 5400;
 
 var player = $('#player');
@@ -40,7 +40,7 @@ function resetMission(){
 ///////////////////////////////////////////////////////
 var bulletName = "bullet" + bulletCount;
 bulletCount++;
-var bulletCords = $('div#' + bulletName).offset(); //to get actual position on the screen
+var bulletCords = $('div#' + bulletName).offset(); // to get actual position on the screen
 
 function collision(){
   var enemies = $(".enemy");
@@ -54,20 +54,22 @@ function collision(){
     && homeCords.top + 250 >= enemyCords.top
     && enemyCords.top + 40 >= homeCords.top){
 
-      enemyPassCount+=1;
+      enemies.eq(i).remove();          // remove the .enemy elements one at a time to the specified index
+      $('div#' + bulletName).remove(); // removes the div
+      enemyPassCount +=1; // score
       parseInt($('span#enemyPass').html(enemyPassCount));
   }
 
   //Bullet hits Enemy
-  if ( bulletCords.left + 10 >= enemyCords.left + 10
-    && bulletCords.top + 10 >= enemyCords.top
-    && enemyCords.top + 40 >= bulletCords.top){
+  // if ( bulletCords.left + 10 >= enemyCords.left + 10
+  //   && bulletCords.top + 10 >= enemyCords.top
+  //   && enemyCords.top + 40 >= bulletCords.top){
 
-      enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
-      $('div#' + bulletName).remove(); // removes the div
-      killCount += 1;
-      parseInt($('span#score').html(killCount));
-    }
+  //     enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
+  //     $('div#' + bulletName).remove(); // removes the div
+  //     killCount += 1;
+  //     parseInt($('span#score').html(killCount));
+  //   }
   } //end of for loop
 } //end of collision
 
@@ -91,8 +93,8 @@ function shoot(){
 
         //increase speed if reach certain kills
         // if (killCount == 5){
-        //   enemyInterval_set2 = setInterval(spawnEnemy, spawnSpeed-200);
-        //      enemySpeed = enemySpeed - 200
+        //   setInterval(spawnEnemy, spawnSpeed-200);
+        //   enemySpeed = enemySpeed - 200
         // }
 
       // gameOver();
@@ -106,7 +108,7 @@ function shooting(){
   if (!locked){
     shoot();
     locked = true; //locked, cannot shoot again
-    shootTimer = setTimeout(unlock, 600); //cannot shoot for a certain time
+    shootTimer = setTimeout(unlock, 400); //cannot shoot for a certain time
   }
 
   function unlock(){
@@ -196,39 +198,48 @@ function gameOver(){
   }
 }
 
-function clearAll(){
+///////////////////////////////////////////////////////
 
-  resetMission();
-  clearInterval(enemyInterval_set1);
-  clearInterval(enemyInterval_set2);
-  spawnSpeed = 1100;
+function clearAll(){
+  $('.enemy').remove();
+  resetMission();  //change Mission value
+  clearInterval(enemyInterval_set1);  //stop intervals
+  clearInterval(enemyInterval_set2);  //stop intervals
+  spawnSpeed = 1100; //back to normal values
   enemySpeed = 5400;
 
+  //Counts
+  bulletCount = 0;
+  enemyCount = 0;
+  killCount = 0;
+  enemyPassCount = 0;
 
-  //Messages
-  $('#winMessage').hide();
-  $('#looseMessage').hide();
-  $('#box').show();
-
-  // $('.enemy').remove();
-
-  // $('span#score').html(0);
-  // $('span#enemyPass').html(0);
-  // $('#startButton').html("Start AGAIN?").attr("disabled", false);
-  // $('#button2').attr("disabled", false);
+  //Scoring
+  $('span#score').html(0);
+  $('span#enemyPass').html(0);
 }
+
+
 
 ///////////////////////////////////////////////////////
 
 //Start Button (event listeners)
 $('#startButton').on('click', function(){
   enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed);
-  $('#startButton').html("Spawning...");
+  $('#startButton').html("Spawning...").attr("disabled", true); //disable start so can't be clicked again
 });
 
-//event listeners
 
-$('#button2').on('click', clearAll);
+$('#resetButton').on('click', function(){
+  clearAll();
+  //Messages
+  $('#box').show();
+  $('#winMessage').hide();
+  $('#looseMessage').hide();
+  $('#startButton').html("Start").attr("disabled", false); //enable so they can start game
+});
+
+//Controlls event listeners
 $(document).keyup(keysReleased);
 $(document).keydown(keysPressed);
 
