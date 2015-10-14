@@ -27,7 +27,6 @@ $('#winMessage').hide();
 $('#looseMessage').hide();
 resetMission();
 
-///////////////////////////////////////////////////////
 
 function resetMission(){
   var missionRandom = game.randomGen(15,30);
@@ -38,6 +37,7 @@ function resetMission(){
 }
 
 ///////////////////////////////////////////////////////
+
 var bulletName = "bullet" + bulletCount;
 bulletCount++;
 var bulletCords = $('div#' + bulletName).offset(); // to get actual position on the screen
@@ -49,15 +49,15 @@ function collision(){
     var enemyCords = enemies.eq(i).offset(); // gets individual position of enemy
     var homeCords = $('#home').offset();
 
-  //Enemy hits #home right border
-  if ( homeCords.left + 53 >= enemyCords.left
-    && homeCords.top + 250 >= enemyCords.top
-    && enemyCords.top + 40 >= homeCords.top){
+    //Enemy hits #home right border
+    if ( homeCords.left + 53 >= enemyCords.left
+      && homeCords.top + 250 >= enemyCords.top
+      && enemyCords.top + 40 >= homeCords.top){
 
-      enemies.eq(i).remove();          // remove the .enemy elements one at a time to the specified index
-      $('div#' + bulletName).remove(); // removes the div
-      enemyPassCount +=1; // score
-      parseInt($('span#enemyPass').html(enemyPassCount));
+        enemies.eq(i).remove();          // remove the .enemy elements one at a time to the specified index
+        $('div#' + bulletName).remove(); // removes the div
+        enemyPassCount +=1; // score
+        parseInt($('span#enemyPass').html(enemyPassCount));
   }
 
   //Bullet hits Enemy
@@ -70,52 +70,12 @@ function collision(){
   //     killCount += 1;
   //     parseInt($('span#score').html(killCount));
   //   }
+
+  speedUp();
+  gameOver();
+
   } //end of for loop
 } //end of collision
-
-///////////////////////////////////////////////////////
-
-function shoot(){
-  var xPos = player.position().top;
-
-  //insert bullet
-  $('div#amo').append('<div class="bullet" id="' + bulletName + '"></div>');
-
-  //attach indivdual bullets to player position
-  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '484px'},{
-    duration: 3000, done: function(){ //3000
-      this.remove();   //remove <div> it at the end of the animation (which is at the max width)
-    },step: function(){
-      collision();
-    }
-  });
-}
-
-        //increase speed if reach certain kills
-        // if (killCount == 5){
-        //   setInterval(spawnEnemy, spawnSpeed-200);
-        //   enemySpeed = enemySpeed - 200
-        // }
-
-      // gameOver();
-
-///////////////////////////////////////////////////////
-
-var locked = false;
-var shootTimer;
-
-function shooting(){
-  if (!locked){
-    shoot();
-    locked = true; //locked, cannot shoot again
-    shootTimer = setTimeout(unlock, 400); //cannot shoot for a certain time
-  }
-
-  function unlock(){
-    locked = false; //to unlock
-    clearTimeout(shootTimer); //clear the time
-  }
-}
 
 ///////////////////////////////////////////////////////
 
@@ -138,6 +98,63 @@ function spawnEnemy(){
         collision();
       }
   });
+}
+
+///////////////////////////////////////////////////////
+
+function shoot(){
+  var xPos = player.position().top;
+
+  //insert bullet
+  $('div#amo').append('<div class="bullet" id="' + bulletName + '"></div>');
+
+  //attach indivdual bullets to player position
+  $('div#' + bulletName).css({'top': xPos+25 + 'px'}).animate({left: '484px'},{
+    duration: 3000, done: function(){ //3000
+      this.remove();   //remove <div> it at the end of the animation (which is at the max width)
+    },step: function(){
+      collision();
+    }
+  });
+}
+
+///////////////////////////////////////////////////////
+
+var locked = false;
+var shootTimer;
+
+function shooting(){
+  if (!locked){
+    shoot();
+    locked = true; //locked, cannot shoot again
+    shootTimer = setTimeout(unlock, 400); //cannot shoot for a certain time
+  }
+
+  function unlock(){
+    locked = false; //to unlock
+    clearTimeout(shootTimer); //clear the time
+  }
+}
+
+///////////////////////////////////////////////////////
+
+function speedUp(){
+  if (killCount == 5){
+    setInterval(spawnEnemy, spawnSpeed-100);
+    enemySpeed -= 50
+  }
+  if (killCount == 10){
+    setInterval(spawnEnemy, spawnSpeed-200);
+    enemySpeed -= 50
+  }
+  if (killCount == 15){
+    setInterval(spawnEnemy, spawnSpeed-300);
+    enemySpeed -= 50
+  }
+  if (killCount == 20){
+    setInterval(spawnEnemy, spawnSpeed-400);
+    enemySpeed -= 50
+  }
 }
 
 ///////////////////////////////////////////////////////
@@ -218,8 +235,6 @@ function clearAll(){
   $('span#score').html(0);
   $('span#enemyPass').html(0);
 }
-
-
 
 ///////////////////////////////////////////////////////
 
