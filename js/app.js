@@ -33,7 +33,7 @@ function resetMission(){
   var missionRandom = game.randomGen(15,30);
   parseInt($('span#mission').html(missionRandom));
 
-  var enemyLimitRandom = Math.floor(game.randomGen(missionRandom*0.2 , missionRandom*0.2));
+  var enemyLimitRandom = Math.floor(game.randomGen(missionRandom*0.3 , missionRandom*0.3));
   parseInt($('span#enemyLimit').html(enemyLimitRandom));
 }
 
@@ -181,20 +181,20 @@ function keysReleased(e) {
 function gameOver(){
   if (killCount >= mission){
     console.log("Wow: Mission complete");
-    // $('#box').fadeOut(1000, function(){
-    //   $('#box').hide();
-    //   $('#winMessage').show();
 
-    //   $('.enemy').remove();
-    // })
-  // }
-  }else if(enemyPassCount >= enemyLimit){
+    $('#box').fadeOut(1000, function(){
+      $('#box').hide();
+      $('#winMessage').show();
+      clearAll();
+    })
+  } else if(enemyPassCount >= enemyLimit){
     console.log("Game over: Reached enemy limits");
-    // $('#box').fadeOut(1000, function(){
-    //   $('#box').hide();
-    //   $('#looseMessage').show();
-    //   $('.enemy').remove();
-    // });
+
+    $('#box').fadeOut(1000, function(){
+      $('#box').hide();
+      $('#looseMessage').show();
+      clearAll();
+    });
   }
 }
 

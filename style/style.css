@@ -1,17 +1,14 @@
 header{
-  height:40px;
+  height:70px;
   width: 500px;
   text-align: center;
+  background-image: url(../images/logo2.png);
+  background-size: 150px;
+  position: relative;
 }
 
 article {
   width: 500px;
-}
-
-body{
-  background-image: url(../images/pig2.png);
-  background-size: 40px;
-
 }
 
 #small1{
@@ -26,7 +23,7 @@ div#scores.row div{
   border: 1px solid grey;
   border-radius: 5px;
   margin-bottom: 5px;
-  background-color: white;
+  color: black;
 }
 
 #scores{
