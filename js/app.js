@@ -12,7 +12,6 @@ $( function() {
   var spawnSpeed = 800;
   var enemySpeed = 3000;
   var enemyInterval_set1;
-  //setInterval(spawnEnemy, spawnSpeed);
 
   var player = $( '#player' );
   var mission = parseInt( $( 'span#mission' ).html() );
@@ -21,24 +20,24 @@ $( function() {
   var missionRandom;
   var enemyLimitRandom;
 
-  ///////////////////////////////////////////////////////
+  //=== Start Setup ===
 
-  //STARTING SCREEN
   $( '#winMessage' ).hide();
   $( '#looseMessage' ).hide();
   $( '#resetButton' ).hide();
   resetMission();
 
+  //=== Reset values of mission and enemy limit ===
   function resetMission() {
     missionRandom = parseInt( game.randomGen( 15, 25 ) );
     parseInt( $( 'span#mission' ).html( missionRandom ) );
 
-    enemyLimitRandom = parseInt( game.randomGen( missionRandom * 0.2, missionRandom * 0.2 ) );
+    enemyLimitRandom = parseInt( game.randomGen( missionRandom * 0.25, missionRandom * 0.25 ) );
     parseInt( $( 'span#enemyLimit' ).html( enemyLimitRandom ) );
 
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Enemy Spawn + Collision with "Home" ===
 
   function spawnEnemy() {
     var makeEnemeyPos = game.randomGen( 40, 210 );
@@ -72,7 +71,7 @@ $( function() {
     } );
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Bullet Shoot + Collision Enemy ===
 
   function shoot() {
     var xPos = player.position().top;
@@ -113,7 +112,7 @@ $( function() {
     } );
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Shooting delay ===
 
   var locked = false;
   var shootTimer;
@@ -131,7 +130,7 @@ $( function() {
     }
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Increase speed of enemy at certain point ===
 
   function speedUp() {
     if ( killCount >= 3 ) {
@@ -142,7 +141,7 @@ $( function() {
     }
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Player Controls + Movement ===
 
   function keysPressed( e ) {
     keys[ e.keyCode ] = true; // store an entry for every key pressed
@@ -158,7 +157,7 @@ $( function() {
         player.clearQueue();
       else {
         player.animate( {
-          top: '-=' + 20
+          top: '-=' + 10
         }, 20 );
         e.preventDefault();
       }
@@ -169,7 +168,7 @@ $( function() {
         player.clearQueue();
       else {
         player.animate( {
-          top: '+=' + 20
+          top: '+=' + 10
         }, 20 );
         e.preventDefault();
       }
@@ -181,7 +180,7 @@ $( function() {
     keys[ e.keyCode ] = false;
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Game Over settings ===
 
   function gameOver() {
     if ( killCount >= missionRandom ) {
@@ -204,33 +203,45 @@ $( function() {
     }
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Clear Board ===
 
   function clearAll() {
     $( '.enemy' ).remove();
     clearInterval( enemyInterval_set1 ); //stop intervals
-
     //Counts
     bulletCount = 0;
     enemyCount = 0;
     killCount = 0;
     enemyPassCount = 0;
+
+    spawnSpeed = 800;
+    enemySpeed = 3000;
   }
 
-  ///////////////////////////////////////////////////////
-
-  //Start Button (event listeners)
-  $( '#startButton' ).on( 'click', function() {
-    clearInterval( enemyInterval_set1 );
-    enemyInterval_set1 = setInterval( spawnEnemy, spawnSpeed );
+  //=== Start Game ===
+  function startGame() {
+    // clearInterval( enemyInterval_set1 );
+    enemyInterval_set1 = setInterval( spawnEnemy, 3000 );
     $( '#startButton' ).hide();
-  } );
+  };
 
+  //=== Event Listeners ===
+
+  //error: game still takes up the previous set interval
   $( '#resetButton' ).on( 'click', function() {
-    document.location.reload( true );
+    clearAll();
+    resetMission();
+    $( '#box' ).show();
+    $( '#winMessage' ).hide();
+    $( '#looseMessage' ).hide();
+    $( '#resetButton' ).hide();
+    $( 'span#score' ).html( 0 );
+    $( 'span#enemyPass' ).html( 0 );
+    $( '#startButton' ).show();
   } );
 
   //Controlls event listeners
+  $( '#startButton' ).on( 'click', startGame );
   $( document ).keyup( keysReleased );
   $( document ).keydown( keysPressed );
 
