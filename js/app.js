@@ -11,12 +11,13 @@ var enemyPassCount = 0;
 
 var spawnSpeed = 1000;
 var enemySpeed = 5100;
+var enemyInterval_set1;
+//setInterval(spawnEnemy, spawnSpeed);
 
 var player = $('#player');
 var mission = parseInt($('span#mission').html());
 var enemyLimitRandom = parseInt($('span#enemyLimit').html());
 
-var enemyInterval_set1;
 var missionRandom;
 var enemyLimitRandom;
 
@@ -131,46 +132,23 @@ function shooting(){
 
 //need to clear these intervals. Error when doing speedUp. Intervals keep going
 function speedUp(){
-  if (killCount >= 2){
+  if (killCount >= 3){
     clearInterval(enemyInterval_set1);
-    enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-200);
-    enemySpeed -= 50
-
-    console.log(enemyInterval_set1);
-    console.log(enemySpeed);
-
-  }
-    else if (killCount >= 5){
-      clearInterval(enemyInterval_set1);
-      enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-500);
-      enemySpeed -= 200
+    spawnSpeed -= 30
+    enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed);
+    enemySpeed -= 100
 
       console.log(enemyInterval_set1);
+      console.log(spawnSpeed);
       console.log(enemySpeed);
-
-  }
-    else if (killCount >= 8){
+  } else if (killCount >= missionRandom){
       clearInterval(enemyInterval_set1);
-      enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-1000);
-      enemySpeed -= 500
-
-      console.log(enemyInterval_set1);
-      console.log(enemySpeed);
-  }
-    else if (killCount >= 15){
-      clearInterval(enemyInterval_set1);
-      enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-1500);
-      enemySpeed -= 1000
-
-      console.log(enemyInterval_set1);
-      console.log(enemySpeed);
   }
 }
 
     console.log(enemyInterval_set1);
     console.log(enemySpeed);
-    console.log(speedUp);
-
+    console.log(spawnSpeed);
 
 ///////////////////////////////////////////////////////
 
