@@ -3,14 +3,20 @@ article {
 }
 
 .title{
-  font-family: 'Alegreya SC', Ultra-Bold 900 Italic;
+  font-family: 'Alegreya SC', Ultra-Bold;
+  font-weight: 900;
   width: 500px;
   text-align: center;
   color: #ff0000;
   font-size: 40px;
-  text-shadow: -3px -3px #BD0900, 1px 1px 0 #000, -2px -2px #000
+  text-shadow: -3px -3px #000, 1px 1px 0 #000, -2px -2px #000
 }
 
+/*h1 {
+  font-family: ‘Metrophobic’, Arial, serif;
+  font-weight: 400;
+}
+*/
 #small1{
   color: #CC5553;
 }
@@ -35,24 +41,34 @@ div#scores.row div{
 }
 
 #startButton{
-  width: 150px;
+  width: 230px;
   font-size: 15px;
-  border-radius: 2px;
+  border-radius: 10px;
   position: absolute;
-  margin-left: 288px;
-  margin-top: 3px;
-  height: 35px;
+  margin-left: 154px;
+  margin-top: 68px;
+  height: 100px;
   z-index: 6;
+  background-color: #FFF992;
+  border: 1px solid black;
+  font-size: 55px;
+  color: #CC3DC0;
+  padding-left: 12px;
 }
 
 #resetButton{
-  border-radius: 2px;
+  border-radius: 1px;
   font-size: 15px;
   position: absolute;
-  margin-left: 441px;
+  margin-left: 400px;
   margin-top: 3px;
-  height: 35px;
   z-index: 5;
+  width: 95px;
+  border-radius: 10px;
+  padding-left: 6px;
+  background-color: #FFF992;
+  border: 2px solid red;
+  color: #CC3DC0;
 }
 
 #box{
@@ -114,9 +130,8 @@ div#scores.row div{
 }
 
 #pig{
-  height: 41px;
-  width: 41px;
-  border: 1px solid red;
+  height: 40px;
+  width: 40px;
   border-radius: 3px;
 }
 
@@ -132,8 +147,8 @@ div#scores.row div{
 
 .bullet{
   position: absolute;
-  border: 1px solid black;
-  background-color: #FFA4DA;
+  border: 1px solid #FFF992;
+  background-color: #CC3DC0;
   border-radius: 5px;
   height: 10px;
   width: 10px;
