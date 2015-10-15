@@ -1,13 +1,14 @@
-header{
-  height:70px;
-  width: 500px;
-  text-align: center;
-  background-size: 150px;
-  position: relative;
-}
-
 article {
   width: 500px;
+}
+
+.title{
+  font-family: 'Alegreya SC', Ultra-Bold 900 Italic;
+  width: 500px;
+  text-align: center;
+  color: #ff0000;
+  font-size: 40px;
+  text-shadow: -3px -3px #BD0900, 1px 1px 0 #000, -2px -2px #000
 }
 
 #small1{
