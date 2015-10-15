@@ -60,14 +60,14 @@ div#scores.row div{
   border-radius: 1px;
   font-size: 15px;
   position: absolute;
-  margin-left: 400px;
-  margin-top: 3px;
+  margin-left: 398px;
+  margin-top: -40px;
   z-index: 5;
   width: 95px;
   border-radius: 10px;
   padding-left: 6px;
   background-color: #FFF992;
-  border: 2px solid red;
+  border: 2px solid #66CCAE;
   color: #CC3DC0;
 }
 
@@ -126,7 +126,6 @@ div#scores.row div{
   border-radius: 4px;
   text-align: center;
   width: 500px;
-  padding-top: 22px;
 }
 
 #pig{

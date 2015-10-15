@@ -9,8 +9,8 @@ var enemyCount = 0;
 var killCount = 0;
 var enemyPassCount = 0;
 
-var spawnSpeed = 900;
-var enemySpeed = 5100;
+var spawnSpeed = 800;
+var enemySpeed = 3000;
 var enemyInterval_set1;
 //setInterval(spawnEnemy, spawnSpeed);
 
@@ -30,10 +30,10 @@ $('#resetButton').hide();
 resetMission();
 
 function resetMission(){
-  missionRandom = parseInt(game.randomGen(15,30));
+  missionRandom = parseInt(game.randomGen(15,25));
   parseInt($('span#mission').html(missionRandom));
 
-  enemyLimitRandom = parseInt(game.randomGen(missionRandom*0.3,missionRandom*0.3));
+  enemyLimitRandom = parseInt(game.randomGen(missionRandom*0.2,missionRandom*0.2));
   parseInt($('span#enemyLimit').html(enemyLimitRandom));
 
 }
@@ -55,7 +55,7 @@ function spawnEnemy(){
               var enemyCords = enemies.eq(i).offset(); // gets individual position
               var homeCords = $('#home').offset();
 
-              if (homeCords.left + 53 >= enemyCords.left
+              if (homeCords.left + 54 >= enemyCords.left
                 && homeCords.top + 250 >= enemyCords.top
                 && enemyCords.top + 40 >= homeCords.top){
 
@@ -98,7 +98,7 @@ function shoot(){
               && enemyCords.top + 35 >= bulletCords.top){
 
                 enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
-                $('div#' + bulletName).fadeOut().remove(); // removes the div
+                $('div#' + bulletName).remove(); // removes the div
 
                 killCount += 1;
                 parseInt($('span#score').html(killCount));
@@ -135,7 +135,7 @@ function shooting(){
 function speedUp(){
   if (killCount >= 3){
     clearInterval(enemyInterval_set1);
-    spawnSpeed -= 40;
+    spawnSpeed -= 30;
     enemySpeed -= 90;
     enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed);
   }
