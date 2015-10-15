@@ -21,9 +21,8 @@ $( function() {
   var missionRandom;
   var enemyLimitRandom;
 
-  ///////////////////////////////////////////////////////
+  //=== Start Setup ===
 
-  //STARTING SCREEN
   $( '#winMessage' ).hide();
   $( '#looseMessage' ).hide();
   $( '#resetButton' ).hide();
@@ -38,7 +37,7 @@ $( function() {
 
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Enemy Spawn + Collision with "Home" ===
 
   function spawnEnemy() {
     var makeEnemeyPos = game.randomGen( 40, 210 );
@@ -72,7 +71,7 @@ $( function() {
     } );
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Bullet Shoot + Collision Enemy ===
 
   function shoot() {
     var xPos = player.position().top;
@@ -113,7 +112,7 @@ $( function() {
     } );
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Shooting delay ===
 
   var locked = false;
   var shootTimer;
@@ -131,7 +130,7 @@ $( function() {
     }
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Increase speed of enemy at certain point ===
 
   function speedUp() {
     if ( killCount >= 3 ) {
@@ -142,7 +141,7 @@ $( function() {
     }
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Player Controls + Movement ===
 
   function keysPressed( e ) {
     keys[ e.keyCode ] = true; // store an entry for every key pressed
@@ -158,7 +157,7 @@ $( function() {
         player.clearQueue();
       else {
         player.animate( {
-          top: '-=' + 20
+          top: '-=' + 10
         }, 20 );
         e.preventDefault();
       }
@@ -169,7 +168,7 @@ $( function() {
         player.clearQueue();
       else {
         player.animate( {
-          top: '+=' + 20
+          top: '+=' + 10
         }, 20 );
         e.preventDefault();
       }
@@ -181,7 +180,7 @@ $( function() {
     keys[ e.keyCode ] = false;
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Game Over settings ===
 
   function gameOver() {
     if ( killCount >= missionRandom ) {
@@ -204,12 +203,11 @@ $( function() {
     }
   }
 
-  ///////////////////////////////////////////////////////
+  //=== Clear Board ===
 
   function clearAll() {
     $( '.enemy' ).remove();
     clearInterval( enemyInterval_set1 ); //stop intervals
-
     //Counts
     bulletCount = 0;
     enemyCount = 0;
@@ -217,20 +215,28 @@ $( function() {
     enemyPassCount = 0;
   }
 
-  ///////////////////////////////////////////////////////
-
-  //Start Button (event listeners)
-  $( '#startButton' ).on( 'click', function() {
+  //=== Start Game ===
+  function startGame() {
     clearInterval( enemyInterval_set1 );
     enemyInterval_set1 = setInterval( spawnEnemy, spawnSpeed );
     $( '#startButton' ).hide();
-  } );
+  };
 
+  //=== Event Listeners ===
   $( '#resetButton' ).on( 'click', function() {
-    document.location.reload( true );
+    clearAll();
+    startGame();
+    resetMission();
+    $( '#box' ).show();
+    $( '#winMessage' ).hide();
+    $( '#looseMessage' ).hide();
+    $( '#resetButton' ).hide();
+    $( 'span#score' ).html( 0 );
+    $( 'span#enemyPass' ).html( 0 );
   } );
 
   //Controlls event listeners
+  $( '#startButton' ).on( 'click', startGame );
   $( document ).keyup( keysReleased );
   $( document ).keydown( keysPressed );
 
