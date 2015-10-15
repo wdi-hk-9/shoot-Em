@@ -2,7 +2,6 @@ header{
   height:70px;
   width: 500px;
   text-align: center;
-  background-image: url(../images/logo2.png);
   background-size: 150px;
   position: relative;
 }
@@ -74,9 +73,13 @@ div#scores.row div{
   margin-left: 3px;
 }
 
-#bacon{
-  width: 250px;
+#bacon, #winAlien{
+  width: 200px;
   height: 180px;
+  position: relative;
+  float: left;
+  margin-left: 36px;
+
 }
 
 #player{
@@ -89,7 +92,7 @@ div#scores.row div{
 }
 
 #winMessage{
-  background-color: #82FFD7;
+  background-color: white;
   font: #164A99;
   border: 1px solid black;
   border-radius: 4px;

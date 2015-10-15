@@ -23,7 +23,7 @@ var enemyLimitRandom;
 
 ///////////////////////////////////////////////////////
 
-//starting screen
+//STARTING SCREEN
 $('#winMessage').hide();
 $('#looseMessage').hide();
 resetMission();
@@ -63,7 +63,7 @@ function spawnEnemy(){
                   parseInt($('span#enemyPass').html(enemyPassCount));
 
                 gameOver();
-                speedUp();
+                // speedUp();
               }
             }
           }
@@ -93,8 +93,8 @@ function shoot(){
             var enemyCords = enemies.eq(i).offset(); // gets individual position
 
             if ( bulletCords.left + 10 >= enemyCords.left + 5
-              && bulletCords.top + 10 >= enemyCords.top
-              && enemyCords.top + 40 >= bulletCords.top){
+              && bulletCords.top + 10 >= enemyCords.top + 1
+              && enemyCords.top + 35 >= bulletCords.top){
 
                 enemies.eq(i).remove();          // remove the .enemy elements to the one at the specified index
                 $('div#' + bulletName).remove(); // removes the div
@@ -134,21 +134,11 @@ function shooting(){
 function speedUp(){
   if (killCount >= 3){
     clearInterval(enemyInterval_set1);
-    spawnSpeed -= 30
+    spawnSpeed -= 40;
     enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed);
-    enemySpeed -= 100
-
-      console.log(enemyInterval_set1);
-      console.log(spawnSpeed);
-      console.log(enemySpeed);
-  } else if (killCount >= missionRandom){
-      clearInterval(enemyInterval_set1);
+    enemySpeed -= 100;
   }
 }
-
-    console.log(enemyInterval_set1);
-    console.log(enemySpeed);
-    console.log(spawnSpeed);
 
 ///////////////////////////////////////////////////////
 
@@ -189,26 +179,23 @@ function keysReleased(e) {
 
 function gameOver(){
   if (killCount >= missionRandom){
-    clearInterval(enemyInterval_set1);
-    console.log("win message");
-
-    // $('#box').fadeOut(1000, function(){
-    //   $('#box').hide();
-    //   $('#winMessage').show();
-    //   $('#startButton').html("Amazing!!!")
-      clearAll();
-    // });
+    clearAll();
+    $('#box').fadeOut(2000, function(){
+      $('#box').hide();
+      $('#winMessage').show();
+      $('#startButton').html("Amazing!!!")
+    });
   }
 
   if(enemyPassCount >= enemyLimitRandom){
+    clearAll();
     clearInterval(enemyInterval_set1);
     console.log("LOST message");
-    // $('#box').fadeOut(1000, function(){
-    //   $('#box').hide();
-    //   $('#looseMessage').show();
-    //   $('#startButton').html("Sadness...")
-      clearAll();
-    // });
+    $('#box').fadeOut(2000, function(){
+      $('#box').hide();
+      $('#looseMessage').show();
+      $('#startButton').html("Sadness...")
+    });
   }
 }
 
@@ -216,20 +203,13 @@ function gameOver(){
 
 function clearAll(){
   $('.enemy').remove();
-  // resetMission();  //change Mission value
   clearInterval(enemyInterval_set1);  //stop intervals
-  spawnSpeed = 1000; //back to normal values
-  enemySpeed = 5100;
 
   //Counts
   bulletCount = 0;
   enemyCount = 0;
   killCount = 0;
   enemyPassCount = 0;
-
-  //Scoring
-  $('span#score').html(0);
-  $('span#enemyPass').html(0);
 }
 
 ///////////////////////////////////////////////////////
@@ -241,14 +221,8 @@ $('#startButton').on('click', function(){
   $('#startButton').html("Spawning...").attr("disabled", true); //disable start so can't be clicked again
 });
 
-
 $('#resetButton').on('click', function(){
-  clearAll();
-  //Messages
-  $('#box').show();
-  $('#winMessage').hide();
-  $('#looseMessage').hide();
-  $('#startButton').html("Start").attr("disabled", false); //enable so they can start game
+  document.location.reload(true);
 });
 
 //Controlls event listeners
