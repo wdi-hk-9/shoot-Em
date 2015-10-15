@@ -12,7 +12,6 @@ $( function() {
   var spawnSpeed = 800;
   var enemySpeed = 3000;
   var enemyInterval_set1;
-  //setInterval(spawnEnemy, spawnSpeed);
 
   var player = $( '#player' );
   var mission = parseInt( $( 'span#mission' ).html() );
@@ -28,11 +27,12 @@ $( function() {
   $( '#resetButton' ).hide();
   resetMission();
 
+  //=== Reset values of mission and enemy limit ===
   function resetMission() {
     missionRandom = parseInt( game.randomGen( 15, 25 ) );
     parseInt( $( 'span#mission' ).html( missionRandom ) );
 
-    enemyLimitRandom = parseInt( game.randomGen( missionRandom * 0.2, missionRandom * 0.2 ) );
+    enemyLimitRandom = parseInt( game.randomGen( missionRandom * 0.25, missionRandom * 0.25 ) );
     parseInt( $( 'span#enemyLimit' ).html( enemyLimitRandom ) );
 
   }
@@ -213,19 +213,23 @@ $( function() {
     enemyCount = 0;
     killCount = 0;
     enemyPassCount = 0;
+
+    spawnSpeed = 800;
+    enemySpeed = 3000;
   }
 
   //=== Start Game ===
   function startGame() {
-    clearInterval( enemyInterval_set1 );
-    enemyInterval_set1 = setInterval( spawnEnemy, spawnSpeed );
+    // clearInterval( enemyInterval_set1 );
+    enemyInterval_set1 = setInterval( spawnEnemy, 3000 );
     $( '#startButton' ).hide();
   };
 
   //=== Event Listeners ===
+
+  //error: game still takes up the previous set interval
   $( '#resetButton' ).on( 'click', function() {
     clearAll();
-    startGame();
     resetMission();
     $( '#box' ).show();
     $( '#winMessage' ).hide();
@@ -233,6 +237,7 @@ $( function() {
     $( '#resetButton' ).hide();
     $( 'span#score' ).html( 0 );
     $( 'span#enemyPass' ).html( 0 );
+    $( '#startButton' ).show();
   } );
 
   //Controlls event listeners
