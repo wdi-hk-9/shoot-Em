@@ -9,16 +9,16 @@ var enemyCount = 0;
 var killCount = 0;
 var enemyPassCount = 0;
 
-var spawnSpeed = 1200; // 1100
-var enemySpeed = 5400;
+var spawnSpeed = 1000;
+var enemySpeed = 5100;
 
 var player = $('#player');
 var mission = parseInt($('span#mission').html());
-var enemyLimit = parseInt($('span#enemyLimit').html());
+var enemyLimitRandom = parseInt($('span#enemyLimit').html());
 
-//interval
-var enemyInterval_set2;
 var enemyInterval_set1;
+var missionRandom;
+var enemyLimitRandom;
 
 ///////////////////////////////////////////////////////
 
@@ -27,13 +27,13 @@ $('#winMessage').hide();
 $('#looseMessage').hide();
 resetMission();
 
-
 function resetMission(){
-  var missionRandom = game.randomGen(15,30);
+  missionRandom = parseInt(game.randomGen(15,30));
   parseInt($('span#mission').html(missionRandom));
 
-  var enemyLimitRandom = Math.floor(game.randomGen(missionRandom*0.3 , missionRandom*0.3));
+  enemyLimitRandom = parseInt(game.randomGen(missionRandom*0.3,missionRandom*0.3));
   parseInt($('span#enemyLimit').html(enemyLimitRandom));
+
 }
 
 ///////////////////////////////////////////////////////
@@ -42,6 +42,7 @@ function spawnEnemy(){
   var makeEnemeyPos = game.randomGen(40,210);
   var enemyName = "enemy" + enemyCount;
   enemyCount++;
+
   $('div#spawn').append('<div class="enemy" id="' + enemyName + '"><img id="pig" src="images/pig2.png"></div>');
   $('div#' + enemyName).css({'top': makeEnemeyPos + 'px'}).animate({left: '53px'},
       {duration: enemySpeed, done: function(){
@@ -58,9 +59,10 @@ function spawnEnemy(){
 
                   enemies.eq(i).remove();
                   enemyPassCount+=1;
-                  console.log(enemyPassCount);
                   parseInt($('span#enemyPass').html(enemyPassCount));
-                  gameOver();
+
+                gameOver();
+                speedUp();
               }
             }
           }
@@ -98,14 +100,14 @@ function shoot(){
 
                 killCount += 1;
                 parseInt($('span#score').html(killCount));
-                gameOver();
-            }
 
+                gameOver();
+                speedUp();
+            }
           }
         }
     });
 }
-
 
 ///////////////////////////////////////////////////////
 
@@ -127,24 +129,48 @@ function shooting(){
 
 ///////////////////////////////////////////////////////
 
-// function speedUp(){
-//   if (killCount == 5){
-//     setInterval(spawnEnemy, spawnSpeed-100);
-//     enemySpeed -= 50
-//   }
-//   if (killCount == 10){
-//     setInterval(spawnEnemy, spawnSpeed-200);
-//     enemySpeed -= 50
-//   }
-//   if (killCount == 15){
-//     setInterval(spawnEnemy, spawnSpeed-300);
-//     enemySpeed -= 50
-//   }
-//   if (killCount == 20){
-//     setInterval(spawnEnemy, spawnSpeed-400);
-//     enemySpeed -= 50
-//   }
-// }
+//need to clear these intervals. Error when doing speedUp. Intervals keep going
+function speedUp(){
+  if (killCount >= 2){
+    clearInterval(enemyInterval_set1);
+    enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-200);
+    enemySpeed -= 50
+
+    console.log(enemyInterval_set1);
+    console.log(enemySpeed);
+
+  }
+    else if (killCount >= 5){
+      clearInterval(enemyInterval_set1);
+      enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-500);
+      enemySpeed -= 200
+
+      console.log(enemyInterval_set1);
+      console.log(enemySpeed);
+
+  }
+    else if (killCount >= 8){
+      clearInterval(enemyInterval_set1);
+      enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-1000);
+      enemySpeed -= 500
+
+      console.log(enemyInterval_set1);
+      console.log(enemySpeed);
+  }
+    else if (killCount >= 15){
+      clearInterval(enemyInterval_set1);
+      enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed-1500);
+      enemySpeed -= 1000
+
+      console.log(enemyInterval_set1);
+      console.log(enemySpeed);
+  }
+}
+
+    console.log(enemyInterval_set1);
+    console.log(enemySpeed);
+    console.log(speedUp);
+
 
 ///////////////////////////////////////////////////////
 
@@ -184,22 +210,27 @@ function keysReleased(e) {
 ///////////////////////////////////////////////////////
 
 function gameOver(){
-  if (killCount >= mission){
-    console.log("Wow: Mission complete");
+  if (killCount >= missionRandom){
+    clearInterval(enemyInterval_set1);
+    console.log("win message");
 
-    $('#box').fadeOut(1000, function(){
-      $('#box').hide();
-      $('#winMessage').show();
+    // $('#box').fadeOut(1000, function(){
+    //   $('#box').hide();
+    //   $('#winMessage').show();
+    //   $('#startButton').html("Amazing!!!")
       clearAll();
-    });
-  } else if(enemyPassCount >= enemyLimit){
-    console.log("Game over: Reached enemy limits");
+    // });
+  }
 
-    $('#box').fadeOut(1000, function(){
-      $('#box').hide();
-      $('#looseMessage').show();
+  if(enemyPassCount >= enemyLimitRandom){
+    clearInterval(enemyInterval_set1);
+    console.log("LOST message");
+    // $('#box').fadeOut(1000, function(){
+    //   $('#box').hide();
+    //   $('#looseMessage').show();
+    //   $('#startButton').html("Sadness...")
       clearAll();
-    });
+    // });
   }
 }
 
@@ -207,11 +238,10 @@ function gameOver(){
 
 function clearAll(){
   $('.enemy').remove();
-  resetMission();  //change Mission value
+  // resetMission();  //change Mission value
   clearInterval(enemyInterval_set1);  //stop intervals
-  clearInterval(enemyInterval_set2);  //stop intervals
-  spawnSpeed = 1100; //back to normal values
-  enemySpeed = 5400;
+  spawnSpeed = 1000; //back to normal values
+  enemySpeed = 5100;
 
   //Counts
   bulletCount = 0;
@@ -228,6 +258,7 @@ function clearAll(){
 
 //Start Button (event listeners)
 $('#startButton').on('click', function(){
+  clearInterval(enemyInterval_set1);
   enemyInterval_set1 = setInterval(spawnEnemy, spawnSpeed);
   $('#startButton').html("Spawning...").attr("disabled", true); //disable start so can't be clicked again
 });
