@@ -1,51 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="style/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Alegreya+SC:400,900italic,900' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-
-      <header>
-        <h2>Mission: Save <span> 2 </span> Hero's </h2>
-        <button id="button" type="button" class="btn btn-info btn-lg btn-block">Start Game</button>
-        <h3>Current Score: <span id="score"> 0 </span></h3>
-      </header>
-
-      <div id="box">
-
-        <div id="home">
-          <span id="homeText">HOME</span>
-          <div id="player"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <header>
+          <h1 class="title">shoot'Em</h1>
+        </header>
+        <div id="scores" class="row">
+          <div class="col-xs-6" style="background-color: #9DD4FF">
+            <small id="small1">Don't let them get to you!</small>
+            <br>Enemy limit:
+            <span id="enemyPass">0</span> / <span id="enemyLimit"></span>
+          </div>
+          <div class="col-xs-6" style="background-color: #92D4C7">
+            <small id="small2">Mission!!!</small>
+            <br> Current kills:
+            <span id="score">0</span> / <span id="mission"></span>
+          </div>
         </div>
 
-        <div id="amo">
-          <!-- insert bullet here -->
-          <!-- <div class="bullet"></div> -->
+        <button id="startButton" type="button" class="btn btn-warning btn-lg">Start</button>
+
+        <div id="box">
+          <div id="home">
+            <span id="homeText">HOME</span>
+            <div id="player"></div>
+          </div>
+          <div id="amo">
+            <!-- insert bullet here -->
+            <!-- <div class="bullet"></div> -->
+          </div>
+          <div id="spawn">
+            <!-- insert enemy here -->
+            <!-- <div class="enemy"></div> -->
+          </div>
         </div>
-
-        <div id="spawn">
-          <!-- insert enemy here -->
-          <!-- <div class="enemy"></div> -->
+        <!-- end of box-->
+        <!-- hidden -->
+        <div id="winMessage">
+          <h3>Congratulation! Mission Complete!</h3>
+          <h4>We all love some BACON!!!</h4>
+          <img id="bacon" src="images/bacon3.jpeg">
+          <img id="winAlien" src="images/pig2.png">
         </div>
-
-      </div> <!-- end of box-->
-
-      <article>Insert instructions for game</article>
-
-    </div> <!-- end of col-->
-  </div> <!-- end of row-->
-</div> <!-- end of container-fluid -->
-
+        <!-- hidden -->
+        <div id="looseMessage">
+          <h3>GAME OVER! Mission Failed!</h3>
+          <img id="alien" src="images/greenAlien.png">
+        </div>
+         <button id="resetButton" type="button" class="btn btn-primary">Start Again?</button>
+        <article>
+          <h3> Instructions </h3>
+          <ul>
+            <li>Up and Down arrow keys: To move your shooter</li>
+            <li>Space bar: To shoot</li>
+          </ul>
+        </article>
+      </div>
+      <!-- end of col-->
+    </div>
+    <!-- end of row-->
+  </div>
+  <!-- end of container-fluid -->
   <script src="js/game.js"></script>
   <script src="js/app.js"></script>
-
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
 </body>
+
 </html>
